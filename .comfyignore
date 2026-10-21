@@ -1,0 +1,3 @@
+# Files useful for developers, but not needed at runtime
+.github/
+README_RU.md
