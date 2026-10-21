@@ -7,7 +7,7 @@ dependencies = []
 authors = [{ name = "NevskiyArt" }]
 
 [project.urls]
-Repository = "https://github.com/nevskiyik/ComfyUI-TXT-Prompt-Picker"
+Repository = "https://github.com/NevskiyArt/ComfyUI-TXT-Prompt-Picker"
 
 [tool.comfy]
 PublisherId = "nevskiyart"
