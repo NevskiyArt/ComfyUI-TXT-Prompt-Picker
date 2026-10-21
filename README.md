@@ -1,4 +1,4 @@
-# TXT Prompt Picker for ComfyUI — by NevskiyArt
+# TXT Prompt Picker for ComfyUI
 
 [Читать инструкцию на русском](README_RU.md)
 
