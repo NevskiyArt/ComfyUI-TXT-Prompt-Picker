@@ -1,6 +1,6 @@
 # TXT Prompt Picker for ComfyUI
 
-**By NevskiyArt** · Version **1.1.0** · [Read the Russian guide](README_RU.md)
+**By NevskiyArt** · Version **1.3.0** · [Read the Russian guide](README_RU.md)
 
 A lightweight custom node that lets you select a local `.txt` file using a file-picker button and queue **all prompts for sequential image generation** in ComfyUI. No manual path entry, no extra Python packages.
 
@@ -8,6 +8,7 @@ A lightweight custom node that lets you select a local `.txt` file using a file-
 
 - Select a TXT file from any folder using the file chooser in ComfyUI.
 - Queue the whole prompt list with one click (one ComfyUI job per prompt).
+- Stop the entire run with **⏹ Stop Entire Series**. This interrupts the current generation and clears the shared pending ComfyUI queue (including pending jobs from other workflows).
 - Choose how prompts are separated: one nonempty line, blank lines, or `---` on its own line.
 - Start from a specified zero-based `seed` index; prompts wrap around at the end.
 - Text encodings: UTF-8 (including BOM), Windows-1251, and BOM-marked UTF-16.
@@ -37,7 +38,7 @@ Once a version is **published and available** in [Comfy Registry](https://regist
    ```
 
 3. Restart ComfyUI. Refresh its page with **Ctrl+F5** if the buttons do not appear.
-4. Add the node **TXT Prompt Picker** from category **TXT Prompts** (in version 1.1 the node's displayed name and button captions are in Russian).
+4. Add the node **TXT Prompt Picker** from category **TXT Prompts** (the node and button labels are in English).
 
 ## Usage
 
@@ -48,7 +49,7 @@ Once a version is **published and available** in [Comfy Registry](https://regist
 5. Click the **generate entire TXT** button. The extension adds one job for each prompt to ComfyUI's queue.
 6. Let ComfyUI process the jobs. To generate multiple images for a single prompt, configure that in the underlying workflow.
 
-**Note:** Version 1.1 uses Russian UI captions. This English guide describes their function without changing the working node's stored option values.
+**Note:** Version 1.3 uses English labels and accepts old Russian option values from existing workflows.
 
 ### Example: one prompt per line
 
@@ -82,3 +83,10 @@ See [PUBLISHING_RU.md](PUBLISHING_RU.md). This repository contains `.github/work
 ## License
 
 [MIT](LICENSE) · Copyright (c) 2026 NevskiyArt
+
+
+## Stop a batch
+
+Click **⏹ Stop Entire Series** inside TXT Prompt Picker. This stops submitting further prompts, requests an interrupt of the current generation, and clears pending jobs in ComfyUI's queue. **Warning:** clearing the queue also discards pending jobs from other workflows, not only this TXT batch. Files already saved are not deleted.
+
+The normal ComfyUI Stop control might interrupt only the current job; use the node's own button for the full batch.
