@@ -1,58 +1,84 @@
 # TXT Prompt Picker for ComfyUI
 
-[Читать инструкцию на русском](README_RU.md)
+**By NevskiyArt** · Version **1.1.0** · [Read the Russian guide](README_RU.md)
 
-A small custom node for **batch image generation from a TXT prompt list** in ComfyUI. Upload a local `.txt` file using the **Choose TXT** button, then press **Generate full TXT** to queue one job per prompt. No manual file paths are required.
+A lightweight custom node that lets you select a local `.txt` file using a file-picker button and queue **all prompts for sequential image generation** in ComfyUI. No manual path entry, no extra Python packages.
 
 ## Features
 
-- Native browser file picker that can select a TXT from any folder on your computer.
-- Batch-queue all prompts with a single button.
-- Sequential order, starting from the node's current `seed` index.
-- Three splitting modes: one nonempty line per prompt, blank lines between prompts, or a line containing `---` between prompts.
-- UTF-8 / UTF-8 BOM and CP1251 text; UTF-16 with BOM.
-- Maximum file size: 10 MiB.
-- Compatible with prompt inputs accepting `STRING`, including workflows for FLUX, Qwen and Z-Image.
-- No third-party Python dependencies beyond those already provided by ComfyUI.
+- Select a TXT file from any folder using the file chooser in ComfyUI.
+- Queue the whole prompt list with one click (one ComfyUI job per prompt).
+- Choose how prompts are separated: one nonempty line, blank lines, or `---` on its own line.
+- Start from a specified zero-based `seed` index; prompts wrap around at the end.
+- Text encodings: UTF-8 (including BOM), Windows-1251, and BOM-marked UTF-16.
+- TXT size limit: 10 MiB.
+- Standard `STRING` output works with FLUX, Qwen-Image, Z-Image and other string-prompt workflows.
 
-## Install manually
+## Installation
 
-1. Download the repository ZIP from **Code > Download ZIP** (or clone the repository).
-2. Place the extracted extension folder into your `ComfyUI/custom_nodes/` directory. Ensure `__init__.py`, `nodes.py`, `routes.py`, and `web/` are directly inside the extension directory.
-3. Restart ComfyUI and refresh the browser if necessary.
-4. Search for the node **TXT → Промпты по очереди** under `TXT Prompts`.
+### From ComfyUI Manager
 
-Once released to [Comfy Registry](https://registry.comfy.org/), it can also be installed through ComfyUI Manager.
+Once a version is **published and available** in [Comfy Registry](https://registry.comfy.org/), search for **TXT Prompt Picker by NevskiyArt** in ComfyUI Manager and install it. A GitHub repository alone does not list an extension in Registry.
+
+### Manually (available immediately)
+
+1. On this GitHub repository select **Code → Download ZIP**.
+2. Extract the repository folder under the **custom nodes directory of the ComfyUI installation you actually use**. The structure must look like:
+
+   ```text
+   ComfyUI/
+   └── custom_nodes/
+       └── ComfyUI-TXT-Prompt-Picker/
+           ├── __init__.py
+           ├── nodes.py
+           ├── routes.py
+           └── web/
+               └── picker.js
+   ```
+
+3. Restart ComfyUI. Refresh its page with **Ctrl+F5** if the buttons do not appear.
+4. Add the node **TXT Prompt Picker** from category **TXT Prompts** (in version 1.1 the node's displayed name and button captions are in Russian).
 
 ## Usage
 
-1. Place the node into your workflow, connecting its `prompt` output to the model's text-prompt input.
-2. Press **📂 Выбрать TXT...** and select any local `.txt` file.
-3. Choose `Одна строка` (one line), `Пустая строка` (blank lines), or `Разделитель ---` (divider).
-4. Set `seed=0` to start at the first prompt.
-5. Press **▶ Генерировать весь TXT** to enqueue the entire collection.
-6. Watch ComfyUI's queue. Each queued job contains a different prompt; one image or batch per job depends on the rest of your workflow.
+1. Connect the node's `prompt` output to a string prompt input of your image-generation workflow.
+2. Click the **folder / choose TXT** button; select any local `.txt` file.
+3. Choose a splitting method using the dropdown: **one line**, **blank line**, or **triple-dash divider**.
+4. Set `seed` to `0` if you want to start at the first prompt.
+5. Click the **generate entire TXT** button. The extension adds one job for each prompt to ComfyUI's queue.
+6. Let ComfyUI process the jobs. To generate multiple images for a single prompt, configure that in the underlying workflow.
 
-Example with one prompt per line:
+**Note:** Version 1.1 uses Russian UI captions. This English guide describes their function without changing the working node's stored option values.
+
+### Example: one prompt per line
 
 ```text
-fantasy witch in an enchanted forest, cinematic lighting
-gothic vampire queen at an ancient castle, moonlight
-warrior princess on a snowy mountain, dramatic lighting
+beautiful fantasy witch, enchanted forest, cinematic lighting
+gothic vampire queen, moonlit castle
+fantasy knight, snow-covered mountain, dramatic lighting
 ```
 
-### Notes
+### Example: multi-line prompts separated by `---`
 
-- The chosen file is copied to the ComfyUI server's `input/txt_prompt_picker/` directory under a generated ID. The source file is not continuously reread from your computer.
-- A workflow JSON does **not** embed the original TXT; collaborators must load their own file.
-- ComfyUI queues and processes jobs separately; the node's button is only responsible for creating the queue.
+```text
+A portrait of a fantasy witch.
+Dramatic rim light, detailed clothing.
+---
+An old gothic castle.
+A full moon above the rooftops.
+```
 
-## Publishing
+## Important notes
 
-The repository includes a starter `pyproject.toml` and a manual GitHub Actions publishing workflow at `.github/workflows/publish.yml`.
+- The selected TXT is **uploaded to the ComfyUI server** under `input/txt_prompt_picker/` with a generated filename; the extension does not permanently watch the original file on your computer. Re-select it after editing.
+- Exported workflow JSON files store the uploaded filename, **not the source TXT text**. Other users must pick/upload their own TXT file.
+- Running the full-TXT button queues jobs; generation still depends on ComfyUI and the other nodes in your workflow.
+- This extension has been used successfully in ComfyUI Desktop; compatibility with every ComfyUI/Manager build has not been independently verified.
 
-**Before publishing:** set `[tool.comfy] PublisherId` to the publisher ID actually registered in Comfy Registry, and verify `[project.urls].Repository` matches this GitHub repository. To publish from GitHub Actions, create a repository secret named `REGISTRY_ACCESS_TOKEN` using a **Comfy Registry publisher API key**. Never commit the token to source control. Trigger the workflow manually via **Actions > Publish to Comfy Registry > Run workflow**.
+## For maintainers: publishing to Comfy Registry
+
+See [PUBLISHING_RU.md](PUBLISHING_RU.md). This repository contains `.github/workflows/publish.yml` for manual publishing. Register the publisher first, check `PublisherId` in `pyproject.toml`, and add the publisher's Registry API key as the GitHub Actions secret `REGISTRY_ACCESS_TOKEN`. **Never put API keys into code or docs.**
 
 ## License
 
-No license has been selected in this starter upload. The project owner should choose a license before wider distribution.
+[MIT](LICENSE) · Copyright (c) 2026 NevskiyArt

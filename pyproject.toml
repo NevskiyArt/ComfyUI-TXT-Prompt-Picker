@@ -1,10 +1,11 @@
 [project]
 name = "txt-prompt-picker-nevskiyart"
 version = "1.1.0"
-description = "Choose a local TXT file and batch-queue text prompts for ComfyUI image generation."
+description = "Choose TXT files and queue image generations for each prompt in ComfyUI."
 requires-python = ">=3.10"
 dependencies = []
 authors = [{ name = "NevskiyArt" }]
+license = { file = "LICENSE" }
 
 [project.urls]
 Repository = "https://github.com/NevskiyArt/ComfyUI-TXT-Prompt-Picker"

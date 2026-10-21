@@ -1,3 +1,3 @@
-# Files useful for developers, but not needed at runtime
+# Keep development-only files out of the Registry distribution.
 .github/
-README_RU.md
+PUBLISHING_RU.md
